@@ -1,0 +1,33 @@
+name: s3go
+description: Github Action written in Golang that can be used for fast upload or download of small files to AWS S3 bucket using concurrency. 
+inputs:
+  mode:
+    required: true
+    description: Operating mode, can be download or upload
+    default: upload
+  bucket:
+    required: true
+    description: S3 bucket name
+  prefix: 
+    required: true
+    default: ""
+    description: S3 bucket prefix
+  localPath:
+    required: true
+    default: "."
+    description: 'when using with "mode: upload" this it the local path that will be uploaded, when using with "mode: download" this will be the path to store the files'
+  exclude:
+    required: false
+    default: ""
+    description: Applicable only when -mode=upload | multiline list of relative path to exclude
+  concurrency:
+    required: false
+    description: Number of concurrent connections to use
+    default: 40
+  queueSize: 
+    required: false
+    description: Size of the queue
+    default: 1000
+runs:
+  using: node16
+  main: action/index.js

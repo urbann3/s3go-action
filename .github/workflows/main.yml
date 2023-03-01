@@ -1,0 +1,54 @@
+name: s3go
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+env:
+  AWS_REGION : ${{ secrets.AWS_REGION }}
+permissions:
+  id-token: write
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1-node16
+        with:
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-to-assume: ${{ secrets.OIDC_ROLE }}
+          role-session-name: OIDCSession
+
+      - name: Clone repository
+        uses: actions/checkout@v3
+        
+        # Generate 1000 files with random size between 1KB and 1500KB
+      - name: Generate files
+        run: |
+          mkdir testFiles
+          for i in {1..1000}; do dd if=/dev/urandom of=testFiles/file$i bs=$((RANDOM%1500+1))k count=1 > /dev/null 2>&1; done
+
+      - name: Upload files using S3GO
+        uses: urbann3/s3go@main
+        with:
+          mode: upload
+          bucket: ${{ secrets.BUCKET }}
+          prefix: s3go_test
+          localPath: testFiles
+          concurrency: 50
+          queueSize: 1000
+          exclude: |
+            .git
+            .github
+
+      - name: Upload files using AWS CLI
+        run: |
+          aws configure set default.s3.max_concurrent_requests 50
+          aws configure set default.s3.max_queue_size 1000
+          aws s3 cp --recursive testFiles s3://${{ secrets.BUCKET }}/s3go_test
+        
+      - name: Cleanup S3
+        run: |
+          aws s3 rm s3://${{ secrets.BUCKET }}/s3go_test --recursive
