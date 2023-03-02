@@ -1,4 +1,4 @@
-# s3go
+# s3go-action
 Github Action that can be used for upload or download of files to AWS S3 bucket using concurrency. As it can spin multiple processes the upload and download of the files is much quicker. The original code is written in golang and this repository is containing the binaries which are then called by the Github action. 
 
 ## Input parameters
@@ -26,7 +26,7 @@ In order for a proper run, this action require:
 Uploading entire directory to S3:
 
 ```yaml
-- uses: urbann3/s3go@v1
+- uses: urbann3/s3go-action@v1
   with:
     mode: upload
     bucket: myBucket
@@ -38,7 +38,7 @@ Uploading entire directory to S3:
 Upload but exclude some directories:
 
 ```yaml
-- uses: urbann3/s3go@v1
+- uses: urbann3/s3go-action@v1
   with:
     mode: upload
     bucket: myBucket
@@ -55,7 +55,7 @@ Upload but exclude some directories:
 Upload specific folder to S3:
 
 ```yaml
-- uses: urbann3/s3go@v1
+- uses: urbann3/s3go-action@v1
   with:
     mode: upload
     bucket: myBucket
@@ -70,7 +70,7 @@ Upload specific folder to S3:
 Download entire S3 bucket:
 
 ```yaml
-- uses: urbann3/s3go@v1
+- uses: urbann3/s3go-action@v1
   with:
     mode: download
     bucket: myBucket
@@ -81,7 +81,7 @@ Download entire S3 bucket:
 
 Download specific path only: 
 ```yaml
-- uses: urbann3/s3go@v1
+- uses: urbann3/s3go-action@v1
   with:
     mode: download
     bucket: myBucket
