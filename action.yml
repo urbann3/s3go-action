@@ -1,5 +1,5 @@
-name: s3go
-description: Github Action written in Golang that can be used for fast upload or download of small files to AWS S3 bucket using concurrency. 
+name: s3go-action
+description: Github Action written in Golang that can be used for fast upload or download to AWS S3 bucket using concurrency. 
 inputs:
   mode:
     required: true
